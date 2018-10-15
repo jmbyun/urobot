@@ -1,4 +1,4 @@
-from position import Position
+from .position import Position
 
 class Direction(object):
     def __init__(self, direction):
@@ -15,6 +15,12 @@ class Direction(object):
         }
         return direction_dict[self.direction]
 
+    def __eq__(self, other):
+        return self.direction == other.direction
+    
+    def __ne__(self, other):
+        return not self == other
+
     def get_delta(self):
         if self.direction == 'l':
             return Position(-1, 0)
@@ -28,4 +34,8 @@ class Direction(object):
     def get_next(self):
         directions = 'ldru'
         return Direction(directions[(directions.index(self.direction) + 1) % 4])
+
+    def get_prev(self):
+        directions = 'ldru'
+        return Direction(directions[(directions.index(self.direction) - 1) % 4])
             

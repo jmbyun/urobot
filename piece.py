@@ -1,5 +1,5 @@
-from position import Position
-from direction import Direction
+from .position import Position
+from .direction import Direction
 
 class Piece(object):
     def __init__(self, position=None, direction=None):
