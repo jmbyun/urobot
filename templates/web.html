@@ -1,0 +1,28 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>urobot-web</title>
+  <script>
+    var ws = new WebSocket("ws://localhost:8888/websocket");
+    ws.onopen = function () {
+      ws.send("Hello, world");
+    };
+    ws.onmessage = function (e) {
+      document.getElementById('output').innerHTML += '\n<br>\n' + e.data; 
+    };
+  </script>
+</head>
+
+<body>
+  <div>
+    urobot-web
+  </div>
+  <div id="output">
+
+  </div>
+</body>
+
+</html>

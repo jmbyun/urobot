@@ -6,12 +6,12 @@ class RobotException(Exception):
     pass
 
 class Robot(Piece):
-    def __init__(self, position=None, direction=None, tokens=0):
+    def __init__(self, position=None, direction=None, beepers=0):
         super().__init__(position, direction)
         self.piece_type = 'Robot'
-        self.tokens = []
-        for _ in range(tokens):
-            self.tokens.append(Token())
+        self.beepers = []
+        for _ in range(beepers):
+            self.beepers.append(Beeper())
 
     def move(self):
         after_position = self.position + self.direction.get_delta()
@@ -45,22 +45,22 @@ class Robot(Piece):
     def is_facing_up(self):
         return self.direction == Direction('up')
 
-    def has_tokens(self):
-        return bool(self.tokens)
+    def has_beepers(self):
+        return bool(self.beepers)
 
-    def is_on_tokens(self):
-        return self.world.is_token(self.position)
+    def is_on_beepers(self):
+        return self.world.is_beeper(self.position)
 
-    def pick_token(self):
-        token = self.world.get_token(self.position)
-        if token is None:
-            raise RobotException('There is no token to pick up!')
-        self.world.remove_piece(self, token.id)
-        self.tokens.append(token)
+    def pick_beeper(self):
+        beeper = self.world.get_beeper(self.position)
+        if beeper is None:
+            raise RobotException('There is no beeper to pick up!')
+        self.world.remove_piece(self, beeper.id)
+        self.beepers.append(beeper)
 
-    def drop_token(self):
-        if not self.tokens:
-            raise RobotException('I have no tokens to drop!')
-        token = self.tokens.pop()
-        token.set_position(self.position.clone())
-        self.world.add_piece(token)
+    def drop_beeper(self):
+        if not self.beepers:
+            raise RobotException('I have no beepers to drop!')
+        beeper = self.beepers.pop()
+        beeper.set_position(self.position.clone())
+        self.world.add_piece(beeper)

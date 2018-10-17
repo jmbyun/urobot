@@ -2,10 +2,10 @@ from .piece import Piece
 from .direction import Direction
 from .position import Position
 
-class Token(Piece):
+class Beeper(Piece):
     def __init__(self, position=None):
         super().__init__(position)
-        self.piece_type = 'Token'
+        self.piece_type = 'Beeper'
 
     def set_position(self, position):
         self.position = position
