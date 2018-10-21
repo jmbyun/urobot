@@ -25,12 +25,13 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath('..'))
 from urobots.helper import *
+from urobots import Wall, Position
 
 def turn_right():
     for i in range(3):
         robot.turn_left()
 
-create_world()
+create_world(walls=[Wall(Position(1, 0), Position(2, 0))])
 robot = Robot()
 robot.move()
 robot.turn_left()

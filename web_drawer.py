@@ -67,7 +67,7 @@ class WebDrawer(JsonDrawer):
         self.open_browser()
 
     def open_browser(self):
-        webbrowser.open_new('http://localhost:%d' % self.port)
+        # webbrowser.open_new('http://localhost:%d' % self.port)
         time.sleep(1)
 
     def print(self, s):

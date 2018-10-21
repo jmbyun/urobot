@@ -5,7 +5,7 @@ from .position import Position
 class Beeper(Piece):
     def __init__(self, position=None):
         super().__init__(position)
-        self.piece_type = 'Beeper'
+        self.piece_type = 'beeper'
 
     def set_position(self, position):
         self.position = position

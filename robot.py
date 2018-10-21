@@ -8,7 +8,7 @@ class RobotException(Exception):
 class Robot(Piece):
     def __init__(self, position=None, direction=None, beepers=0):
         super().__init__(position, direction)
-        self.piece_type = 'Robot'
+        self.piece_type = 'robot'
         self.beepers = []
         for _ in range(beepers):
             self.beepers.append(Beeper())

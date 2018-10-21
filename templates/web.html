@@ -5,24 +5,255 @@
 <head>
   <meta charset="utf-8">
   <title>urobot-web</title>
+  <style>
+    #output {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    html {
+      box-sizing: border-box;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    .u-robot-drawer__world {
+      margin: 0 auto;
+      /* border: 1px solid #ddd; */
+    }
+
+    .u-robot-drawer__world-cell {
+      float: left;
+      margin: 0;
+      padding: 0;
+      border-left: 1px solid #ddd;
+      z-index: 101;
+    }
+
+    .u-robot-drawer__world-cell:last-of-type {
+      border-right: 1px solid #ddd;
+    }
+
+    .u-robot-drawer__world-row {
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid #ddd;
+      z-index: 100;
+    }
+
+    .u-robot-drawer__world-row:last-of-type {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .u-robot-drawer__piece {
+      position: absolute;
+      z-index: 105;
+    }
+
+    .u-robot-drawer__piece--type-robot {
+      background-color: #f00;
+    }
+
+    .u-robot-drawer__piece--type-beeper {
+      z-index: 102;
+      background-color: #ff0;
+    }
+  </style>
   <script>
-    var ws = new WebSocket("ws://localhost:8888/websocket");
-    ws.onopen = function () {
-      ws.send("Hello, world");
-    };
-    ws.onmessage = function (e) {
-      document.getElementById('output').innerHTML += '\n<br>\n' + e.data; 
-    };
+    class URobotDrawer {
+      constructor(container) {
+        this.container = container;
+        this.initWorld();
+        // var btn = document.createElement("BUTTON");        // Create a <button> element
+        // var t = document.createTextNode("CLICK ME");       // Create a text node
+        // btn.appendChild(t);                                // Append the text to <button>
+        // document.body.appendChild(btn);  
+      }
+
+      initWorld() {
+        this.world = document.createElement('div');
+        this.world.className = 'u-robot-drawer__world';
+        this.container.appendChild(this.world);
+        this.pieces = {};
+      }
+
+      scaleWorld() {
+        const containerWidth = this.container.offsetWidth;
+        const containerHeight = this.container.offsetHeight;
+
+        const cellSizeForWidthFit = containerWidth / this.worldWidth;
+        const worldHeightForWidthFit = cellSizeForWidthFit * this.worldHeight;
+        if (containerHeight > worldHeightForWidthFit) {
+          this.scaleWorldWidthFit();
+        } else {
+          this.scaleWorldHeightFit(); 
+        }
+      }
+
+      drawGrid() {
+        this.cells = {}
+        for (let i = this.worldHeight - 1; i >= 0; i--) {
+          this.cells[i] = {};
+          const row = document.createElement('div');
+          row.className = 'u-robot-drawer__world-row';
+          row.style.width = '100%';
+          row.style.height = `${this.worldCellSize}px`;
+          this.world.appendChild(row);
+          for (let j = 0; j < this.worldWidth; j++) {
+            const cell = document.createElement('div');
+            this.cells[i][j] = cell;
+            cell.className = 'u-robot-drawer__world-cell';
+            cell.style.width = `${this.worldCellSize}px`;
+            cell.style.height = `${this.worldCellSize}px`;
+            row.appendChild(cell);
+          }
+        }
+      }
+
+      scaleWorldWidthFit() {
+        const containerWidth = this.container.offsetWidth;
+        const containerHeight = this.container.offsetHeight;
+        const worldWidthPixels = containerWidth;
+        this.worldCellSize = worldWidthPixels / this.worldWidth;
+        const worldHeightPixels = this.worldCellSize * this.worldHeight; 
+        this.setWorldSize(worldWidthPixels, worldHeightPixels)
+        const worldPaddingTop = (containerHeight - worldHeightPixels) / 2;
+        this.world.style.paddingTop = `${worldPaddingTop}px`;
+      }
+
+      scaleWorldHeightFit() {
+        const containerWidth = this.container.offsetWidth;
+        const containerHeight = this.container.offsetHeight;
+        const worldHeightPixels = containerHeight;
+        this.worldCellSize = worldHeightPixels / this.worldHeight
+        const worldWidthPixels = this.worldCellSize * this.worldWidth;
+        this.setWorldSize(worldWidthPixels, worldHeightPixels)
+      }
+
+      setWorldSize(width, height) {
+        this.world.style.width = `${width}px`;
+        this.world.style.height = `${height}px`;
+      }
+
+      setPieceClasses(piece, pieceType, direction) {
+        const classNames = [
+          `u-robot-drawer__piece`,
+          `u-robot-drawer__piece--type-${pieceType}`,
+          `u-robot-drawer__piece--direction-${direction}`,
+        ];
+        piece.className = classNames.join(' ');
+      }
+
+      setPiecePosition(piece, x, y) {
+        piece.style.left = this.worldCellSize * x;
+        piece.style.top = this.worldCellSize * (this.worldHeight - 1 - y);
+      }
+
+      onDrawWorld(task) {
+        this.worldWidth = task.width;
+        this.worldHeight = task.height;
+        this.scaleWorld();
+        this.drawGrid();
+      }
+
+      onDrawWall(task) {
+        const targetCell = this.cells[task.y1][task.x1];
+        if (task.x1 === task.x2) {
+          if (task.y1 + 1 === task.y2) {
+            targetCell.style.borderTop = '1px solid #222';
+          } else if (task.y1 - 1 === task.y2) {
+            targetCell.style.borderBottom = '1px solid #222';
+          }
+        } else if (task.y1 === task.y2) {
+          if (task.x1 + 1 === task.x2) {
+            targetCell.style.borderRight = '1px solid #222';
+          } else if (task.x1 - 1 === task.x2) {
+            targetCell.style.borderLeft = '1px solid #222';
+          }
+        }
+      }
+
+      onDrawPiece(task) {
+        const piece = document.createElement('div');
+        piece.style.width = this.worldCellSize;
+        piece.style.height = this.worldCellSize;
+        this.pieces[task.piece_id] = piece;
+        this.setPieceClasses(piece, task.piece_type, task.direction);
+        this.setPiecePosition(piece, task.x, task.y);
+        this.world.appendChild(piece);
+      }
+
+      onRemovePiece(task) {
+        const piece = this.pieces[task.piece_id];
+        this.world.removeChild(piece);
+      }
+
+      onMovePiece(task) {
+        const piece = this.pieces[task.piece_id];
+        this.setPiecePosition(piece, task.x, task.y);
+      }
+
+      onRotatePiece(task) {
+        const piece = this.pieces[task.piece_id];
+        this.setPieceClasses(piece, piece.piece_type, task.direction);
+      }
+
+      onTask(taskMessage) {
+        const task = JSON.parse(taskMessage);
+        console.log(task);
+        switch (task.task) {
+          case 'draw_world':
+            this.onDrawWorld(task);
+            break;
+          
+          case 'draw_wall':
+            this.onDrawWall(task);
+            break;
+
+          case 'draw_piece':
+            this.onDrawPiece(task);
+            break;
+
+          case 'remove_piece':
+            this.onRemovePiece(task);
+            break;
+
+          case 'move_piece':
+            this.onMovePiece(task);
+            break;
+
+          case 'rotate_piece':
+            this.onRotatePiece(task);
+            break;
+        
+          default:
+            break;
+        }
+        // this.container.innerHTML += '\n<br>\n' + task;
+      }
+    }
+    
+    function init() {
+      const drawer = new URobotDrawer(document.getElementById('output'));
+      const ws = new WebSocket("ws://localhost:8888/websocket");
+      ws.onopen = function () {
+
+      };
+      ws.onmessage = function (e) {
+        drawer.onTask(e.data);
+      };
+    }
+
+    window.onload = init;
   </script>
 </head>
 
 <body>
-  <div>
-    urobot-web
-  </div>
-  <div id="output">
-
-  </div>
+  <div id="output"></div>
 </body>
 
 </html>
