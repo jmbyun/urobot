@@ -50,6 +50,21 @@
       border-bottom: 1px solid #ddd;
     }
 
+    .u-robot-drawer__beeper {
+      position: absolute;
+      z-index: 104;
+      border-radius: 50%;
+      background-color: #ff0;
+      color: black;
+      text-align: center;
+      font-size: 16px;
+      padding-top: calc(50% - 8px);
+    }
+
+    .u-robot-drawer__beeper--invisible {
+      display: none;
+    }
+
     .u-robot-drawer__piece {
       position: absolute;
       z-index: 105;
@@ -79,8 +94,7 @@
     }
 
     .u-robot-drawer__piece--type-beeper {
-      z-index: 102;
-      background-color: #ff0;
+      display: none;
     }
   </style>
   <script>
@@ -96,6 +110,7 @@
         this.container.appendChild(this.world);
         this.pieceElements = {};
         this.pieces = {};
+        this.beeperElements = {};
       }
 
       scaleWorld() {
@@ -194,6 +209,40 @@
         }
       }
 
+      getBeeperCount(x, y) {
+        let count = 0;
+        for (const piece of this.pieces) {
+          if (piece.piece_type === 'beeper' && piece.x === x && piece.y === y) {
+            count++;
+          }
+        }
+        return count;
+      }
+
+      getBeeperElement(x, y) {
+        let beeperElement = this.beeperElements[`${x},${y}`];
+        if (!beeperElement) {
+          beeperElement = document.createElement('div');
+          beeperElement.style.width = `${this.worldCellSize}px`;
+          beeperElement.style.height = `${this.worldCellSize}px`;
+          this.setPiecePosition(beeperElement, x, y);
+          this.world.appendChild(beeperElement);
+          this.beeperElements[`${x},${y}`] = beeperElement;
+        }
+        return beeperElement;
+      }
+
+      refreshBeeperElement(x, y) {
+        const beeperElement = this.getBeeperElement(x, y);
+        const beeperCount = this.getBeeperCount(x, y);
+        if (beeperCount > 0) { 
+          beeperElement.className = `u-robot-drawer__beeper`;
+          beeperElement.innerHTML = beeperCount;
+        } else {
+          beeperElement.className = `u-robot-drawer__beeper u-robot-drawer__beeper--invisible`;
+        }
+      }
+
       onDrawPiece(task) {
         const pieceElement = document.createElement('div');
         pieceElement.style.width = `${this.worldCellSize}px`;
@@ -206,6 +255,9 @@
           y: task.y,
           direction: task.direction,
         };
+        if (task.piece_type === 'beeper') {
+          this.refreshBeeperElement(task.x, task.y);
+        }
         this.setPieceClasses(pieceElement, task.piece_type, task.direction);
         this.setPiecePosition(pieceElement, task.x, task.y);
         this.world.appendChild(pieceElement);
@@ -213,6 +265,10 @@
 
       onRemovePiece(task) {
         const pieceElement = this.pieceElements[task.piece_id];
+        const piece = this.pieces[task.piece_id];
+        if (piece.piece_type === 'beeper') {
+          this.refreshBeeperElement(piece.x, piece.y);
+        }
         this.world.removeChild(pieceElement);
         delete this.pieceElements[task.piece_id];
         delete this.pieces[task.piece_id];
@@ -263,7 +319,6 @@
           default:
             break;
         }
-        // this.container.innerHTML += '\n<br>\n' + task;
       }
     }
     

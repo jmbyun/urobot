@@ -32,9 +32,10 @@ def turn_right():
         robot.turn_left()
 
 create_world(walls=[Wall(Position(1, 0), Position(2, 0))])
-robot = Robot()
+robot = Robot(beepers=1)
 robot.set_pause(1)
 robot.move()
+robot.drop_beeper()
 robot.turn_left()
 robot.move()
 turn_right()

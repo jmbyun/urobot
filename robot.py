@@ -1,4 +1,5 @@
 from .piece import Piece
+from .beeper import Beeper
 from .direction import Direction
 from .position import Position
 import time
