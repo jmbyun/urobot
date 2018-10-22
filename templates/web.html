@@ -53,6 +53,7 @@
     .u-robot-drawer__piece {
       position: absolute;
       z-index: 105;
+      transition: left 0.5s, top 0.5s;
     }
 
     .u-robot-drawer__piece--type-robot {
@@ -87,10 +88,6 @@
       constructor(container) {
         this.container = container;
         this.initWorld();
-        // var btn = document.createElement("BUTTON");        // Create a <button> element
-        // var t = document.createTextNode("CLICK ME");       // Create a text node
-        // btn.appendChild(t);                                // Append the text to <button>
-        // document.body.appendChild(btn);  
       }
 
       initWorld() {
