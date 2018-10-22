@@ -1,6 +1,7 @@
 from .piece import Piece
 from .direction import Direction
 from .position import Position
+import time
 
 class RobotException(Exception):
     pass
@@ -10,8 +11,12 @@ class Robot(Piece):
         super().__init__(position, direction)
         self.piece_type = 'robot'
         self.beepers = []
+        self.pause_duration = 0
         for _ in range(beepers):
             self.beepers.append(Beeper())
+
+    def set_pause(self, duration):
+        self.pause = duration
 
     def move(self):
         after_position = self.position + self.direction.get_delta()
@@ -22,6 +27,7 @@ class Robot(Piece):
         self.position = after_position
         if self.world:
             self.world.on_move(self.id, self.position)
+            time.sleep(self.pause)
 
     def turn_left(self):
         self.direction = self.direction.get_next()

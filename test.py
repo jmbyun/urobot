@@ -33,6 +33,7 @@ def turn_right():
 
 create_world(walls=[Wall(Position(1, 0), Position(2, 0))])
 robot = Robot()
+robot.set_pause(1)
 robot.move()
 robot.turn_left()
 robot.move()
@@ -41,5 +42,6 @@ robot.move()
 turn_right()
 robot.move()
 robot.turn_left()
+
 for i in range(10):
     robot.move()
