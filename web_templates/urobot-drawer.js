@@ -8,15 +8,6 @@ class URobotDrawer {
     this.initWorldElement();
   }
 
-  // initWorld() {
-  //   this.world = document.createElement('div');
-  //   this.world.className = 'u-robot-drawer__world';
-  //   this.container.appendChild(this.world);
-  //   this.pieceElements = {};
-  //   this.pieces = {};
-  //   this.beeperElements = {};
-  // }
-
   initWorldElement() {
     this.worldElement = document.createElement('div');
     this.worldElement.className = 'urobot-drawer__world';
@@ -85,113 +76,6 @@ class URobotDrawer {
     const worldWidthPixels = worldCellSize * this.worldWidth;
     this.setWorldElementSize(worldWidthPixels, worldHeightPixels, 0);
   }
-
-
-  // scaleWorld() {
-  //   const containerWidth = this.container.offsetWidth;
-  //   const containerHeight = this.container.offsetHeight;
-
-  //   const cellSizeForWidthFit = containerWidth / this.worldWidth;
-  //   const worldHeightForWidthFit = cellSizeForWidthFit * this.worldHeight;
-  //   if (containerHeight > worldHeightForWidthFit) {
-  //     this.scaleWorldWidthFit(containerWidth, containerHeight);
-  //   } else {
-  //     this.scaleWorldHeightFit(containerWidth, containerHeight);
-  //   }
-  // }
-
-  // drawGrid() {
-  //   this.cells = {}
-  //   for (let i = this.worldHeight - 1; i >= 0; i--) {
-  //     this.cells[i] = {};
-  //     const row = document.createElement('div');
-  //     row.className = 'u-robot-drawer__world-row';
-  //     row.style.width = '100%';
-  //     row.style.height = `${this.worldCellSize}px`;
-  //     this.world.appendChild(row);
-  //     for (let j = 0; j < this.worldWidth; j++) {
-  //       const cell = document.createElement('div');
-  //       this.cells[i][j] = cell;
-  //       cell.className = 'u-robot-drawer__world-cell';
-  //       cell.style.width = `${this.worldCellSize}px`;
-  //       cell.style.height = `${this.worldCellSize}px`;
-  //       row.appendChild(cell);
-  //     }
-  //   }
-  // }
-
-  // scaleWorldWidthFit() {
-  //   const containerWidth = this.container.offsetWidth;
-  //   const containerHeight = this.container.offsetHeight;
-  //   const worldWidthPixels = containerWidth;
-  //   this.worldCellSize = worldWidthPixels / this.worldWidth;
-  //   const worldHeightPixels = this.worldCellSize * this.worldHeight;
-  //   this.setWorldSize(worldWidthPixels, worldHeightPixels)
-  //   const worldPaddingTop = (containerHeight - worldHeightPixels) / 2;
-  //   this.world.style.paddingTop = `${worldPaddingTop}px`;
-  // }
-
-  // scaleWorldHeightFit() {
-  //   const containerWidth = this.container.offsetWidth;
-  //   const containerHeight = this.container.offsetHeight;
-  //   const worldHeightPixels = containerHeight;
-  //   this.worldCellSize = worldHeightPixels / this.worldHeight
-  //   const worldWidthPixels = this.worldCellSize * this.worldWidth;
-  //   this.setWorldSize(worldWidthPixels, worldHeightPixels)
-  // }
-
-  // setWorldSize(width, height) {
-  //   this.world.style.width = `${width}px`;
-  //   this.world.style.height = `${height}px`;
-  // }
-
-  // setPieceClasses(piece, pieceType, direction) {
-  //   const classNames = [
-  //     `u-robot-drawer__piece`,
-  //     `u-robot-drawer__piece--type-${pieceType}`,
-  //     `u-robot-drawer__piece--direction-${direction}`,
-  //   ];
-  //   piece.className = classNames.join(' ');
-  // }
-
-  // setPiecePosition(piece, x, y) {
-  //   piece.style.left = `${this.worldCellSize * x}px`;
-  //   piece.style.top = `${this.worldCellSize * (this.worldHeight - 1 - y)}px`;
-  // }
-
-  // getBeeperCount(x, y) {
-  //   let count = 0;
-  //   for (const piece of this.pieces) {
-  //     if (piece.piece_type === 'beeper' && piece.x === x && piece.y === y) {
-  //       count++;
-  //     }
-  //   }
-  //   return count;
-  // }
-
-  // getBeeperElement(x, y) {
-  //   let beeperElement = this.beeperElements[`${x},${y}`];
-  //   if (!beeperElement) {
-  //     beeperElement = document.createElement('div');
-  //     beeperElement.style.width = `${this.worldCellSize}px`;
-  //     beeperElement.style.height = `${this.worldCellSize}px`;
-  //     this.setPiecePosition(beeperElement, x, y);
-  //     this.world.appendChild(beeperElement);
-  //     this.beeperElements[`${x},${y}`] = beeperElement;
-  //   }
-  //   return beeperElement;
-  // }
-
-  // refreshBeeperElement(x, y) {
-  //   const beeperElement = this.getBeeperElement(x, y);
-  //   const beeperCount = this.getBeeperCount(x, y);
-  //   if (beeperCount > 0) {
-  //     beeperElement.className = `u-robot-drawer__beeper`;
-  //     beeperElement.innerHTML = beeperCount;
-  //   } else {
-  //     beeperElement.className = `u-robot-drawer__beeper u-robot-drawer__beeper--invisible`;
-  //   }
-  // }
 
   getCoordinatePercentage(x, y) {
     return {
