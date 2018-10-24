@@ -1,23 +1,25 @@
-from .piece import Piece
+from .agent import Agent
 from .beeper import Beeper
 from .direction import Direction
 from .position import Position
 import time
 
+DEFAULT_PAUSE_DURATION = 0.5
+
 class RobotException(Exception):
     pass
 
-class Robot(Piece):
+class Robot(Agent):
     def __init__(self, position=None, direction=None, beepers=0):
-        super().__init__(position, direction)
-        self.piece_type = 'robot'
+        super().__init__(position=position, direction=direction)
+        self.pause_duration = DEFAULT_PAUSE_DURATION
         self.beepers = []
-        self.pause_duration = 0
         for _ in range(beepers):
             self.beepers.append(Beeper())
+        self.agent_type = 'robot'
 
     def set_pause(self, duration):
-        self.pause = duration
+        self.pause_duration = duration
 
     def move(self):
         after_position = self.position + self.direction.get_delta()
@@ -27,13 +29,13 @@ class Robot(Piece):
             raise RobotException('Cannot move! There is a wall in front of me!')
         self.position = after_position
         if self.world:
-            self.world.on_move(self.id, self.position)
-            time.sleep(self.pause)
+            self.world.on_move(self)
+            time.sleep(self.pause_duration)
 
     def turn_left(self):
         self.direction = self.direction.get_next()
         if self.world:
-            self.world.on_rotate(self.id, self.direction)
+            self.world.on_rotate(self)
 
     def is_adjacent_position_clear(self, position):
         is_front_in_world = self.world.is_in_world(position)

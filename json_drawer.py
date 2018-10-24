@@ -20,29 +20,18 @@ class JsonDrawer(Drawer):
         for p in pieces.values():
             self.print_dict({
                 'task': 'draw_piece',
-                'piece_type': p.piece_type,
-                'piece_id': p.id,
-                'x': p.position.x,
-                'y': p.position.y,
-                'direction': p.direction.direction
+                **(p.to_dict())
             })
         for w in walls:
             self.print_dict({
                 'task': 'draw_wall',
-                'x1': w.position_1.x,
-                'y1': w.position_1.y,
-                'x2': w.position_2.x,
-                'y2': w.position_2.y
+                **(w.to_dict())
             })
 
     def on_add(self, piece):
         self.print_dict({
             'task': 'draw_piece',
-            'piece_type': piece.piece_type,
-            'piece_id': piece.id,
-            'x': piece.position.x,
-            'y': piece.position.y,
-            'direction': piece.direction.direction
+            **(piece.to_dict())
         })
 
     def on_remove(self, piece_id):
@@ -51,17 +40,14 @@ class JsonDrawer(Drawer):
             'piece_id': piece_id
         })
 
-    def on_move(self, piece_id, after_position):
+    def on_move(self, piece):
         self.print_dict({
             'task': 'move_piece',
-            'piece_id': piece_id,
-            'x': after_position.x,
-            'y': after_position.y
+            **(piece.to_dict())
         })
 
-    def on_rotate(self, piece_id, after_direction):
+    def on_rotate(self, piece):
         self.print_dict({
             'task': 'rotate_piece',
-            'piece_id': piece_id,
-            'direction': after_direction.direction
+            **(piece.to_dict())
         })

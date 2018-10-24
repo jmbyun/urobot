@@ -9,10 +9,17 @@ import time
 import pkg_resources
 from .json_drawer import JsonDrawer
 
-web_template = pkg_resources.resource_string('templates', 'web.html')
-
 class MainWebHandler(tornado.web.RequestHandler):
-    def get(self):
+    def get(self, matched_part=None):
+        target_path = 'index.html' if matched_part is '' else matched_part
+        web_template = pkg_resources.resource_string('web_templates', target_path)
+        if target_path.endswith('htm') or target_path.endswith('html'):
+            content_type = 'text/html'
+        elif target_path.endswith('css'):
+            content_type = 'text/css'
+        else:
+            content_type = 'text/plain';
+        self.set_header("Content-Type", content_type)
         self.write(web_template)
 
 class TaskWebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -48,7 +55,7 @@ class WebThread(threading.Thread):
 
         return tornado.web.Application([
             (r'/websocket', ThreadTaskWebSocketHandler),
-            (r"/", MainWebHandler),
+            (r"/(.*)$", MainWebHandler),
         ])
 
     def run(self):

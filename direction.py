@@ -6,7 +6,7 @@ class Direction(object):
         if self.direction not in 'lrud':
             raise Exception('Unknown direction')
 
-    def __repr__(self):
+    def __str__(self):
         direction_dict = {
             'l': 'Left',
             'r': 'Right',
@@ -20,6 +20,9 @@ class Direction(object):
     
     def __ne__(self, other):
         return not self == other
+
+    def to_char(self):
+        return self.direction
 
     def get_delta(self):
         if self.direction == 'l':

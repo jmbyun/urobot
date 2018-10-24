@@ -1,0 +1,33 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>urobot-web</title>
+  <style></style>
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <script src="/urobot-drawer.js"></script>
+  <script>
+    window.urobot = window.urobot || {};
+    function init() {
+      const outputElement = document.getElementById('output');
+      window.urobot.drawer = new URobotDrawer(outputElement);
+      window.addEventListener('resize', function() { window.urobot.drawer.resize() });
+      const ws = new WebSocket("ws://localhost:8888/websocket");
+      ws.onopen = function () {
+
+      };
+      ws.onmessage = function (e) {
+        window.urobot.drawer.onTask(e.data);
+      };
+    }
+    window.onload = init;
+  </script>
+</head>
+
+<body>
+  <div id="output"></div>
+</body>
+
+</html>

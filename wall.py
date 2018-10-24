@@ -12,3 +12,11 @@ class Wall(object):
 
     def __ne__(self, other):
         return not self == other
+
+    def to_dict(self):
+        return {
+            'x1': self.position_1.x,
+            'y1': self.position_1.y,
+            'x2': self.position_2.x,
+            'y2': self.position_2.y
+        }

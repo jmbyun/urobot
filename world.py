@@ -41,8 +41,8 @@ class World(object):
                 return piece
         return None
 
-    def on_move(self, piece_id, after_position):
-        self.drawer.on_move(piece_id, after_position)
+    def on_move(self, piece):
+        self.drawer.on_move(piece)
 
-    def on_rotate(self, piece_id, after_direction):
-        self.drawer.on_rotate(piece_id, after_direction)
+    def on_rotate(self, piece):
+        self.drawer.on_rotate(piece)
