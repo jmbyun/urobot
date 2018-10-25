@@ -165,7 +165,7 @@ class URobotDrawer {
     traceElement.style.top = `${coordinate.y + (this.cellHeightPercentage / 2)}%`;
     traceElement.style.borderColor = agent.traceColor || 'transparent';
     this.worldElement.appendChild(traceElement);
-    traceElement.classList.remove('urobot-drawer__agent-trace--invisible');
+    setTimeout(() => traceElement.classList.remove('urobot-drawer__agent-trace--invisible'), 100);
     traceElements.push(traceElement);
   }
 
@@ -182,7 +182,7 @@ class URobotDrawer {
     traceElement.style.top = `${coordinate.y + (this.cellHeightPercentage / 2)}%`;
     traceElement.style.borderColor = agent.traceColor || 'transparent';
     this.worldElement.appendChild(traceElement);
-    traceElement.classList.remove('urobot-drawer__agent-trace--invisible');
+    setTimeout(() => traceElement.classList.remove('urobot-drawer__agent-trace--invisible'), 100);
     traceElements.push(traceElement);
   }
 

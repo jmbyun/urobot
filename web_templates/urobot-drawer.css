@@ -69,11 +69,12 @@
   width: 8px;
   height: 8px;
   z-index: 105;
-  transition: visibility 0.5s;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .urobot-drawer__agent-trace--invisible {
-  visibility: hidden;
+  opacity: 0;
 }
 
 .urobot-drawer__agent-trace--direction-r {
