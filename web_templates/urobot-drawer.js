@@ -24,10 +24,10 @@ class URobotDrawer {
     this.resize();
   }
 
-  setWorldElementSize(width, height, paddingTop) {
+  setWorldElementSize(width, height, marginTop) {
     this.worldElement.style.width = `${width}px`;
     this.worldElement.style.height = `${height}px`;
-    this.worldElement.style.paddingTop = `${paddingTop}px`;
+    this.worldElement.style.marginTop = `${marginTop}px`;
   }
 
   initGridCells() {
@@ -66,8 +66,8 @@ class URobotDrawer {
     const worldWidthPixels = containerWidth;
     const worldCellSize = worldWidthPixels / this.worldWidth;
     const worldHeightPixels = worldCellSize * this.worldHeight;
-    const worldPaddingTop = (containerHeight - worldHeightPixels) / 2;
-    this.setWorldElementSize(worldWidthPixels, worldHeightPixels, worldPaddingTop);
+    const worldMarginTop = (containerHeight - worldHeightPixels) / 2;
+    this.setWorldElementSize(worldWidthPixels, worldHeightPixels, worldMarginTop);
   }
 
   scaleWorldHeightFit(containerWidth, containerHeight) {
