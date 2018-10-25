@@ -58,9 +58,66 @@ html {
   height: 5px;
 }
 
+.urobot-drawer__agent-trace {
+  position: absolute;
+  border-width: 0;
+  border-style: solid;
+  width: 8px;
+  height: 8px;
+  z-index: 105;
+}
+
+.urobot-drawer__agent-trace--direction-r {
+  margin-top: -4px;
+  margin-left: -4px;
+  border-bottom-width: 1px;
+}
+
+.urobot-drawer__agent-trace--direction-u {
+  margin-top: 4px;
+  margin-left: -4px;
+  border-right-width: 1px;
+}
+
+.urobot-drawer__agent-trace--direction-l {
+  margin-top: -4px;
+  margin-left: 4px;
+  border-top-width: 1px;
+}
+
+.urobot-drawer__agent-trace--direction-d {
+  margin-top: -4px;
+  margin-left: -4px;
+  border-left-width: 1px;
+}
+
+.urobot-drawer__agent-trace--direction-ru {
+  margin-top: -4px;
+  margin-left: -4px;
+  border-bottom-width: 1px;
+}
+
+.urobot-drawer__agent-trace--direction-ul {
+  margin-top: -4px;
+  margin-left: -4px;
+  border-right-width: 1px;
+}
+
+.urobot-drawer__agent-trace--direction-ld {
+  margin-top: -4px;
+  margin-left: -4px;
+  border-top-width: 1px;
+}
+
+.urobot-drawer__agent-trace--direction-dr {
+  margin-top: -4px;
+  margin-left: -4px;
+  border-left-width: 1px;
+}
+
 .urobot-drawer__agent {
   position: absolute;
-  z-index: 105;
+  z-index: 106;
   transition: left 0.5s, top 0.5s;
 }
 

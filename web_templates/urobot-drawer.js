@@ -124,12 +124,59 @@ class URobotDrawer {
     this.agents[agent.id] = {
       ...agent,
       element: agentElement,
+      traceElements: [],
     };
   }
 
   removeAgent(agentId) {
     this.worldElement.removeChild(this.agents[agentId].element);
+    for (const traceElement of this.agents[agentId].traceElements) {
+      this.worldElement.removeChild(traceElement);
+    }
     delete this.agents[agentId];
+  }
+
+  drawAgentTrace(agent, x1, y1, x2, y2) {
+    const traceElements = this.agents[agent.id].traceElements;
+    const isVertical = x1 === x2;
+    let direction = null;
+    let coordinate = null;
+    
+    const traceElement = document.createElement('div');
+    if (isVertical) {
+      direction = y1 > y2 ? 'd' : 'u';
+      coordinate = this.getCoordinatePercentage(x1, Math.max(y1, y2));
+      traceElement.style.height = `${this.cellHeightPercentage}%`;
+    } else {
+      direction = x1 > x2 ? 'l' : 'r';
+      coordinate = this.getCoordinatePercentage(Math.min(x1, x2), y1);
+      traceElement.style.width = `${this.cellHeightPercentage}%`;
+    }
+    traceElement.className = [
+      'urobot-drawer__agent-trace',
+      `urobot-drawer__agent-trace--direction-${direction}`,
+    ].join(' ');
+    
+    traceElement.style.left = `${coordinate.x + (this.cellWidthPercentage / 2)}%`;
+    traceElement.style.top = `${coordinate.y + (this.cellHeightPercentage / 2)}%`;
+    traceElement.style.borderColor = agent.traceColor || 'transparent';
+    this.worldElement.appendChild(traceElement);
+    traceElements.push(traceElement);
+  }
+
+  drawAgentRotateTrace(agent, direction1, direction2) {
+    const traceElements = this.agents[agent.id].traceElements;
+    const coordinate = this.getCoordinatePercentage(agent.x, agent.y);
+    const traceElement = document.createElement('div');
+    traceElement.className = [
+      'urobot-drawer__agent-trace',
+      `urobot-drawer__agent-trace--direction-${direction1}${direction2}`,
+    ].join(' ');
+    traceElement.style.left = `${coordinate.x + (this.cellWidthPercentage / 2)}%`;
+    traceElement.style.top = `${coordinate.y + (this.cellHeightPercentage / 2)}%`;
+    traceElement.style.borderColor = agent.traceColor || 'transparent';
+    this.worldElement.appendChild(traceElement);
+    traceElements.push(traceElement);
   }
 
   moveAgent(agent) {
@@ -137,6 +184,13 @@ class URobotDrawer {
     const agentElement = this.agents[agent.id].element;
     agentElement.style.left = `${coordinate.x}%`;
     agentElement.style.top = `${coordinate.y}%`;
+    this.drawAgentTrace(
+      agent,
+      this.agents[agent.id].x, 
+      this.agents[agent.id].y,
+      agent.x,
+      agent.y,
+    );
     this.agents[agent.id] = {
       ...this.agents[agent.id],
       x: agent.x,
@@ -151,6 +205,11 @@ class URobotDrawer {
       `urobot-drawer__agent--type-${agent.agentType}`,
       `urobot-drawer__agent--direction-${agent.direction}`,
     ].join(' ');
+    this.drawAgentRotateTrace(
+      agent,
+      this.agents[agent.id].direction,
+      agent.direction,
+    );
     this.agents[agent.id] = {
       ...this.agents[agent.id],
       direction: agent.direction,
@@ -221,6 +280,7 @@ class URobotDrawer {
       x: task.x,
       y: task.y,
       direction: task.direction,
+      traceColor: task.trace_color,
     };
   }
 
