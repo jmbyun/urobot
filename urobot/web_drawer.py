@@ -20,13 +20,17 @@ def get_free_port():
 class MainWebHandler(tornado.web.RequestHandler):
     def get(self, matched_part=None):
         target_path = 'index.html' if matched_part is '' else matched_part
-        web_template = pkg_resources.resource_string('web_templates', target_path)
-        if target_path.endswith('htm') or target_path.endswith('html'):
-            content_type = 'text/html'
-        elif target_path.endswith('css'):
-            content_type = 'text/css'
-        else:
-            content_type = 'text/plain';
+        try:
+            web_template = pkg_resources.resource_string('web_templates', target_path)
+            if target_path.endswith('htm') or target_path.endswith('html'):
+                content_type = 'text/html'
+            elif target_path.endswith('css'):
+                content_type = 'text/css'
+            else:
+                content_type = 'text/plain'
+        except FileNotFoundError:
+            web_template = '404: Fild not found'
+            content_type = 'text/plain'
         self.set_header("Content-Type", content_type)
         self.write(web_template)
 
@@ -76,7 +80,7 @@ class WebThread(threading.Thread):
         tornado.ioloop.IOLoop.current().start()
 
 class WebDrawer(JsonDrawer):
-    def __init__(self, port=8888):
+    def __init__(self, port=get_free_port()):
         super().__init__()
         self.port = get_free_port() if port is None else port
         self.task_queue = queue.Queue()

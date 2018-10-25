@@ -22,7 +22,7 @@ load_world('temp_world.json')
 
 robot = Robot(beepers=3)
 robot.set_pause(0.5)
-robot.set_trace('blue')
+robot.set_trace('#222')
 robot.move()
 robot.drop_beeper()
 robot.drop_beeper()
