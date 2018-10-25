@@ -1,22 +1,42 @@
 from .agent import Agent
 from .beeper import Beeper
-from .direction import Direction
-from .position import Position
+from .direction import Direction, load_direction_from_save
+from .position import Position, load_position_from_save
 import time
 
 DEFAULT_PAUSE_DURATION = 0.5
+
+def load_robot_from_save(robot_save):
+    return Robot(
+        position=load_position_from_save(robot_save['position']),
+        direction=load_direction_from_save(robot_save['direction']),
+        beepers=robot_save['beepers'],
+        pause=robot_save['pause'],
+        trace=robot_save['trace']
+    )
 
 class RobotException(Exception):
     pass
 
 class Robot(Agent):
-    def __init__(self, position=None, direction=None, beepers=0):
-        super().__init__(position=position, direction=direction)
-        self.pause_duration = DEFAULT_PAUSE_DURATION
+    def __init__(self, position=None, direction=None, beepers=0, pause=None, trace=None):
+        super().__init__(position=position, direction=direction, trace=trace)
+        self.pause_duration = DEFAULT_PAUSE_DURATION if pause is None else pause
         self.beepers = []
         for _ in range(beepers):
             self.beepers.append(Beeper())
         self.agent_type = 'robot'
+
+    def to_save(self):
+        return {
+            'type': 'robot',
+            'piece_type': 'agent',
+            'position': self.position.to_save(),
+            'direction': self.direction.to_save(),
+            'beepers': len(self.beepers),
+            'pause': self.pause_duration,
+            'trace': self.trace_color
+        }
 
     def set_pause(self, duration):
         self.pause_duration = duration
@@ -70,7 +90,7 @@ class Robot(Agent):
 
     def drop_beeper(self):
         if not self.beepers:
-            raise RobotException('I have no beepers to drop!')
+            raise RobotException('I have no beeper to drop!')
         beeper = self.beepers.pop()
         beeper.set_position(self.position.clone())
         self.world.add_piece(beeper)

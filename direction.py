@@ -1,5 +1,8 @@
 from .position import Position
 
+def load_direction_from_save(direction_save):
+    return Direction(direction_save['direction'])
+
 class Direction(object):
     def __init__(self, direction):
         self.direction = direction.lower()[0]
@@ -23,6 +26,12 @@ class Direction(object):
 
     def to_char(self):
         return self.direction
+
+    def to_save(self):
+        return { 
+            'type': 'direction', 
+            'direction': self.direction 
+        }
 
     def get_delta(self):
         if self.direction == 'l':

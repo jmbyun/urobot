@@ -1,3 +1,6 @@
+def load_position_from_save(position_save):
+    return Position(position_save['x'], position_save['y'])
+
 class Position(object):
     def __init__(self, x, y):
         self.x = x
@@ -17,3 +20,10 @@ class Position(object):
 
     def to_list(self):
         return [self.x, self.y]
+
+    def to_save(self):
+        return { 
+            'type': 'position', 
+            'x': self.x, 
+            'y': self.y 
+        }

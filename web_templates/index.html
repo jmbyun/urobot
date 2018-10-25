@@ -15,12 +15,11 @@
       window.urobot.drawer = new URobotDrawer(outputElement);
       window.addEventListener('resize', function() { window.urobot.drawer.resize() });
       const ws = new WebSocket("ws://localhost:8888/websocket");
-      ws.onopen = function () {
-
-      };
+      ws.onopen = function () {};
       ws.onmessage = function (e) {
         window.urobot.drawer.onTask(e.data);
       };
+      ws.onclose = function () {};
     }
     window.onload = init;
   </script>

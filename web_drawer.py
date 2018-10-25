@@ -6,8 +6,16 @@ import queue
 import webbrowser
 import asyncio
 import time
+import socket
 import pkg_resources
 from .json_drawer import JsonDrawer
+
+def get_free_port():
+    tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tcp.bind(('', 0))
+    addr, port = tcp.getsockname()
+    tcp.close()
+    return port
 
 class MainWebHandler(tornado.web.RequestHandler):
     def get(self, matched_part=None):
@@ -70,7 +78,7 @@ class WebThread(threading.Thread):
 class WebDrawer(JsonDrawer):
     def __init__(self, port=8888):
         super().__init__()
-        self.port = port
+        self.port = get_free_port() if port is None else port
         self.task_queue = queue.Queue()
         self.socket_semaphore = threading.Semaphore(value=0)
         self.web_thread = WebThread(
