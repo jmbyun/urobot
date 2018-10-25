@@ -1,51 +1,13 @@
-#output {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-}
-
-html {
-  box-sizing: border-box;
-}
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
 .urobot-drawer__world {
-  position: relative;
-  margin: 0 auto;
-  /* border: 1px solid #ddd; */
+  border: 5px solid #666;
 }
 
-.urobot-drawer__world-grid-cell {
-  float: left;
-  margin: 0;
-  padding: 0;
-  border-left: 1px solid #ddd;
-  z-index: 101;
-}
-
-.urobot-drawer__world-grid-cell:last-of-type {
-  border-right: 1px solid #ddd;
-}
-
-.urobot-drawer__world-grid-row {
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid #ddd;
-  z-index: 100;
-}
-
-.urobot-drawer__world-grid-row:last-of-type {
-  border-bottom: 1px solid #ddd;
+.urobot-drawer__world-grid {
+  border-color: #ddd;
 }
 
 .urobot-drawer__wall {
-  position: absolute;
-  background-color: #444; 
-  z-index: 103;
+  background-color: #666;
 }
 
 .urobot-drawer__wall--vertical {
@@ -56,74 +18,6 @@ html {
 .urobot-drawer__wall--horizontal {
   margin-top: -2px;
   height: 5px;
-}
-
-.urobot-drawer__agent-trace {
-  position: absolute;
-  border-width: 0;
-  border-style: solid;
-  width: 8px;
-  height: 8px;
-  z-index: 105;
-  transition: visibility 0.5s;
-}
-
-.urobot-drawer__agent-trace--invisible {
-  visibility: hidden;
-}
-
-.urobot-drawer__agent-trace--direction-r {
-  margin-top: -4px;
-  margin-left: -4px;
-  border-bottom-width: 1px;
-}
-
-.urobot-drawer__agent-trace--direction-u {
-  margin-top: 4px;
-  margin-left: -4px;
-  border-right-width: 1px;
-}
-
-.urobot-drawer__agent-trace--direction-l {
-  margin-top: -4px;
-  margin-left: 4px;
-  border-top-width: 1px;
-}
-
-.urobot-drawer__agent-trace--direction-d {
-  margin-top: -4px;
-  margin-left: -4px;
-  border-left-width: 1px;
-}
-
-.urobot-drawer__agent-trace--direction-ru {
-  margin-top: -4px;
-  margin-left: -4px;
-  border-bottom-width: 1px;
-}
-
-.urobot-drawer__agent-trace--direction-ul {
-  margin-top: -4px;
-  margin-left: -4px;
-  border-right-width: 1px;
-}
-
-.urobot-drawer__agent-trace--direction-ld {
-  margin-top: -4px;
-  margin-left: -4px;
-  border-top-width: 1px;
-}
-
-.urobot-drawer__agent-trace--direction-dr {
-  margin-top: -4px;
-  margin-left: -4px;
-  border-left-width: 1px;
-}
-
-.urobot-drawer__agent {
-  position: absolute;
-  z-index: 106;
-  transition: left 0.5s, top 0.5s;
 }
 
 .urobot-drawer__agent--type-robot {
@@ -146,20 +40,6 @@ html {
 
 .urobot-drawer__agent--type-robot.urobot-drawer__agent--direction-l {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAeCAMAAAAfOR5kAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADAFBMVEUAAAAzMzNbW1v/AACAgICkpKTAwMD////XBGfUxJj////UxJPXZEgQCQABCJgAAICpsbAAACQAAAGhoaIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS5+jxWDYBCJipsbAAAIDUhLLUhr4BCJgAADkS6CTY57IQCQABCJgQCQCpsbAAABgAAALaFogAABUS6HzXOZWpscAQCQC1WqAS6GAS6QG2L+RFNyAQCQAAAIAAAAFPyjgS6OS1WqC1VShP0RYAAABPyji1WqAS6OS1RBxP7jPXNnrY5zIAAAAAAAEAAAAAAADUi9kS6NxBx0G1DExCx4VCx43LD8i1DGxFM5sS6NxFM7JFM7oS6XhFM8QS6NwS6VzLD8jLD8i1WqAS6PRCWLYABAEAAAC7q7gAAAES6SDUhzQMCQgABAEAAAC7q7jLD8i6q80AAAAS6VwS6TjUtqPUhPzUhaQXAywAAAEWIhgWIjgABAAWYDgAAADUtik94ZEMCQgS6fAAAAAWYDg94ZwAAAAAAAAABAAAABMAAAAS6fzXBGfUiDD////UiCrUuJsAAADLD8gMCQgABAEAAAC7q7h/uXwAAAEAAAAAAAAAAAAAAACKACEABADV8+N/uWh/mfgAAAAAAAQAAaYAAAIABAAAABMWIjgBEtkAAAAAAAAAAAAAAAAAAAAAAAAAAAAS5TiAFjwAAAUAAAUj8qSAGByAGKwj8rAAc0YS6sA97BsWYDgAAAAWIbgAAAQAAAAS6yg95ZgAAAAS6ojUhzQS6oDUtqPUhPzUhaQXAywAAAEAAAAWYDgWIbgXAwES6pTUwr8S6sQ90ZMXAyw95ZgWYDjUiKYAAAAAAAIAAMgAABMWIcAS6uzUhzQMCQgAAA8AAAAAAAA95Zi6q80AAAAS6yg95ZgS61TUi9n98AAS61TUiFoS6xTUiCoAAA895ZgS7iwAABQAAAEAAAAAAAAAABAAAAAQCQAAAAEAAAAAAAAS6wjxbGQS7fzXBGfUiDD////UiCoAAAAAAAAQ6+rlAAAACHRSTlP/////////AN6DvVkAAAB9SURBVHjardBBDsAgCATABaX8/8dFjBWVHpqUk5kAAlBVbMFGTYm4jhC5mBWlLOqOzlHNN2bIw9Z7ZiNlTpmRZ4cv37h8Yk23zG7ifFwQfsEWVtB2hDfWwLVzlY2tOOV+qiQbJ9PcJfAy3sP+HKn/cv/rZIrTbSx5kzG0xQ39dAqxz8DMUwAAAABJRU5ErkJggg==);
-}
-
-.urobot-drawer__marker {
-  display: grid;
-  position: absolute;
-  z-index: 104;
-}
-
-.urobot-drawer__marker-label {
-  margin: auto;
-}
-
-.urobot-drawer__marker--invisible {
-  display: none;
 }
 
 .urobot-drawer__marker--type-beeper {

@@ -5,8 +5,17 @@
 <head>
   <meta charset="utf-8">
   <title>urobot-web</title>
-  <style></style>
-  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <style>
+    #output {
+      position: fixed;
+      top: 10vh;
+      left: 10vw;
+      width: 80vw;
+      height: 80vh;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="/urobot-drawer.css" />
+  <link rel="stylesheet" type="text/css" href="/urobot-drawer-theme-default.css" />
   <script src="/urobot-drawer.js"></script>
   <script>
     window.urobot = window.urobot || {};
@@ -14,7 +23,9 @@
       const outputElement = document.getElementById('output');
       window.urobot.drawer = new URobotDrawer(outputElement);
       window.addEventListener('resize', function() { window.urobot.drawer.resize() });
-      const ws = new WebSocket("ws://localhost:8888/websocket");
+      const hostname = window.location.hostname;
+      const port = window.location.port;
+      const ws = new WebSocket("ws://" + hostname + ":" + port + "/websocket");
       ws.onopen = function () {};
       ws.onmessage = function (e) {
         window.urobot.drawer.onTask(e.data);

@@ -32,13 +32,16 @@ class URobotDrawer {
 
   initGridCells() {
     this.gridCells = {};
+    this.gridElement = document.createElement('div');
+    this.gridElement.className = 'urobot-drawer__world-grid';
+    this.worldElement.appendChild(this.gridElement);
     for (let i = this.worldHeight - 1; i >= 0; i--) {
       this.gridCells[i] = {};
       const rowElement = document.createElement('div');
       rowElement.className = 'urobot-drawer__world-grid-row';
       rowElement.style.width = '100%';
       rowElement.style.height = `${this.cellHeightPercentage}%`;
-      this.worldElement.appendChild(rowElement);
+      this.gridElement.appendChild(rowElement);
       for (let j = 0; j < this.worldWidth; j++) {
         const cellElement = document.createElement('div');
         this.gridCells[i][j] = cellElement;
