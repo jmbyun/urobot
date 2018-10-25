@@ -65,6 +65,11 @@ html {
   width: 8px;
   height: 8px;
   z-index: 105;
+  transition: visibility 0.5s;
+}
+
+.urobot-drawer__agent-trace--invisible {
+  visibility: hidden;
 }
 
 .urobot-drawer__agent-trace--direction-r {

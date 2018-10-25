@@ -11,6 +11,7 @@
   <script>
     window.urobot = window.urobot || {};
     function init() {
+      alert('wait!');
       const outputElement = document.getElementById('output');
       window.urobot.drawer = new URobotDrawer(outputElement);
       window.addEventListener('resize', function() { window.urobot.drawer.resize() });

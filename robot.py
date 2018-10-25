@@ -36,6 +36,7 @@ class Robot(Agent):
         self.direction = self.direction.get_next()
         if self.world:
             self.world.on_rotate(self)
+            time.sleep(self.pause_duration)
 
     def is_adjacent_position_clear(self, position):
         is_front_in_world = self.world.is_in_world(position)

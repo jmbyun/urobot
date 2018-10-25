@@ -26,6 +26,7 @@ class TaskWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         self.periodic_callback = tornado.ioloop.PeriodicCallback(self.check_queue, 100)
         self.periodic_callback.start()
+        self.socket_semaphore.release() # Release the WebDrawer instance constructor.
 
     def on_message(self, message):
         pass
@@ -42,9 +43,10 @@ class TaskWebSocketHandler(tornado.websocket.WebSocketHandler):
                 break
 
 class WebThread(threading.Thread):
-    def __init__(self, port, task_queue):
+    def __init__(self, port, task_queue, socket_semaphore):
         super().__init__()
         self.task_queue = task_queue
+        self.socket_semaphore = socket_semaphore
         self.port = port
 
     def make_app(self):
@@ -52,6 +54,7 @@ class WebThread(threading.Thread):
             def __init__(sub_self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
                 sub_self.task_queue = self.task_queue
+                sub_self.socket_semaphore = self.socket_semaphore
 
         return tornado.web.Application([
             (r'/websocket', ThreadTaskWebSocketHandler),
@@ -69,13 +72,17 @@ class WebDrawer(JsonDrawer):
         super().__init__()
         self.port = port
         self.task_queue = queue.Queue()
-        self.web_thread = WebThread(port=port, task_queue=self.task_queue)
+        self.socket_semaphore = threading.Semaphore(value=0)
+        self.web_thread = WebThread(
+            port=port, 
+            task_queue=self.task_queue,
+            socket_semaphore=self.socket_semaphore)
         self.web_thread.start()
         self.open_browser()
 
     def open_browser(self):
         webbrowser.open_new('http://localhost:%d' % self.port)
-        time.sleep(1)
+        self.socket_semaphore.acquire() # Wait until the web socket connection is opened.
 
     def print(self, s):
         self.task_queue.put(s)

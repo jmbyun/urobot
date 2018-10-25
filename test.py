@@ -10,7 +10,7 @@ def turn_right():
 
 create_world(walls=[Wall(Position(1, 0), Position(2, 0))])
 robot = Robot(beepers=1)
-robot.set_pause(0.2)
+robot.set_pause(0.5)
 robot.set_trace('blue')
 robot.move()
 robot.drop_beeper()
