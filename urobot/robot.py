@@ -27,6 +27,11 @@ class Robot(Agent):
             self.beepers.append(Beeper())
         self.agent_type = 'robot'
 
+    def _is_adjacent_position_clear(self, position):
+        is_front_in_world = self.world.is_in_world(position)
+        is_no_wall_front = not self.world.is_wall_between(self.position, position)
+        return is_front_in_world and is_no_wall_front
+
     def to_save(self):
         return {
             'type': 'robot',
@@ -58,19 +63,14 @@ class Robot(Agent):
             self.world.on_rotate(self)
             time.sleep(self.pause_duration)
 
-    def is_adjacent_position_clear(self, position):
-        is_front_in_world = self.world.is_in_world(position)
-        is_no_wall_front = not self.world.is_wall_between(self.position, position)
-        return is_front_in_world and is_no_wall_front
-
     def is_front_clear(self):
-        return self.is_adjacent_position_clear(self.position + self.direction.get_delta())
+        return self._is_adjacent_position_clear(self.position + self.direction.get_delta())
 
     def is_left_clear(self):
-        return self.is_adjacent_position_clear(self.position + self.direction.get_next().get_delta())
+        return self._is_adjacent_position_clear(self.position + self.direction.get_next().get_delta())
 
     def is_right_clear(self):
-        return self.is_adjacent_position_clear(self.position + self.direction.get_prev().get_delta())
+        return self._is_adjacent_position_clear(self.position + self.direction.get_prev().get_delta())
 
     def is_facing_up(self):
         return self.direction == Direction('up')

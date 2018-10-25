@@ -1,11 +1,10 @@
-from .direction import Direction
-from .drawer import Drawer
-from .piece import Piece
-from .position import Position
-from .robot import Robot as GeneralRobot
-# from .terminal_drawer import TerminalDrawer
-from .wall import Wall
-from .world import World, load_world_from_save
+from .urobot.direction import Direction
+from .urobot.drawer import Drawer
+from .urobot.piece import Piece
+from .urobot.position import Position
+from .urobot.robot import Robot as GeneralRobot
+from .urobot.wall import Wall
+from .urobot.world import World, load_world_from_save
 import json
 
 def create_world(**kwargs):

@@ -1,14 +1,13 @@
-from .direction import Direction
-from .drawer import Drawer
-from .piece import Piece
-from .position import Position
-from .robot import Robot
-from .beeper import Beeper
-# from .terminal_drawer import TerminalDrawer
-from .debug_drawer import DebugDrawer
-from .json_drawer import JsonDrawer
-from .wall import Wall
-from .world import World
+from .urobot.direction import Direction
+from .urobot.drawer import Drawer
+from .urobot.piece import Piece
+from .urobot.position import Position
+from .urobot.robot import Robot
+from .urobot.beeper import Beeper
+from .urobot.json_drawer import JsonDrawer
+from .urobot.web_drawer import WebDrawer
+from .urobot.wall import Wall
+from .urobot.world import World
 
 __all__ = [
   'Direction',
@@ -16,8 +15,8 @@ __all__ = [
   'Piece',
   'Position',
   'Robot',
-  'DebugDrawer',
   'JsonDrawer',
+  'WebDrawer',
   'Wall',
   'World',
   'Beeper'

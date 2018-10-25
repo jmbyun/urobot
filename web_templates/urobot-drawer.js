@@ -343,7 +343,6 @@ class URobotDrawer {
 
   onTask(taskMessage) {
     const task = JSON.parse(taskMessage);
-    console.log(task);
     switch (task.task) {
       case 'draw_world':
         this.onDrawWorld(task);
