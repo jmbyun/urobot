@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.1",
     author="Jeongmin Byun",
     author_email="jmbyun91@gmail.com",
-    description="Environment for controlling a robot on the grid world for learning to program in python.",
+    description="Environment for controlling a robot on the grid world for learning to program in Python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://gitlab.com/jmbyun/urobots",
